@@ -108,9 +108,10 @@ $(function() {
         });
         
         it('are loaded', function(done) {
-            //feed has at least 1 child element
-            let numEntries = document.querySelector('.feed').childElementCount;
-            expect(numEntries).toBeGreaterThan(0);
+            //feed has at least 1 element with class 'entry'
+            let feed = document.querySelector('.feed');
+            let entries = feed.querySelectorAll('.entry');
+            expect(entries.length).toBeGreaterThan(0);
             done();
         });
     });
