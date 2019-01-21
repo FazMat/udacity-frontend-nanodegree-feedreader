@@ -12,6 +12,7 @@ An RSS feed reader with Jasmine testing as part of Udacity's Front-End Nanodegre
 
 ## Instructions
 Index.html loads rss feeds from multiple sources. Clicking on the menu-icon open/closes menu, where you can change the source. A Jasmine test is also loaded, confirming correct behaviour (hopefully).
+You can get the files by downloading the zip or by cloning the repo.
 
 ## Dependencies
 
