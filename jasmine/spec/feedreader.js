@@ -22,7 +22,9 @@ $(function() {
          * page?
          */
         it('are defined', function() {
+            //make sure that the allFeeds variable has been defined
             expect(allFeeds).toBeDefined();
+            //and that it is not empty
             expect(allFeeds.length).not.toBe(0);
         });
 
@@ -32,8 +34,11 @@ $(function() {
          * and that the URL is not empty.
          */
         it('have URLs', function() {
+            //loop through each feed
             allFeeds.forEach(function(feed) {
+                //url is defined
                 expect(feed.url).toBeDefined();
+                //url is not empty
                 expect(feed.url.length).not.toBe(0);
             });
         });
@@ -43,8 +48,11 @@ $(function() {
          * and that the name is not empty.
          */
         it('have names', function() {
+            //loop through each feed
             allFeeds.forEach(function(feed) {
+                //name is defined
                 expect(feed.name).toBeDefined();
+                //name is not empty
                 expect(feed.name.length).not.toBe(0);
             });
         });
@@ -53,6 +61,7 @@ $(function() {
 
     /* TODO: Write a new test suite named "The menu" */
     describe('The menu', function() {
+        //DOM-elements needed for testing
         let body = document.querySelector('body');
         let menuIcon = document.querySelector('.menu-icon-link');
         /* TODO: Write a test that ensures the menu element is
@@ -61,6 +70,8 @@ $(function() {
          * hiding/showing of the menu element.
          */
         it('is hidden by default', function() {
+            //body element has class named 'menu-hidden'
+            //see style.css: tranlsate3d
             expect(body.className).toBe('menu-hidden');
         });
 
@@ -70,9 +81,13 @@ $(function() {
           * clicked and does it hide when clicked again.
           */
         it('toggles visibility when icon is clicked', function() {
+            //make a click on menu-icon
             menuIcon.click();
+            //menu is visible
             expect(body.className).toBe('');
+            //make another click on menu-icon
             menuIcon.click();
+            //menu is invisible
             expect(body.className).toBe('menu-hidden');
         });
     });
@@ -86,11 +101,13 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
+        //wait for allFeeds[0] to be loaded
         beforeEach(function(done) {
             loadFeed(0, done);
         });
         
         it('are loaded', function(done) {
+            //first child is there and has an appropriate class
             let entryClass = document.querySelector('.feed').firstElementChild.className;
             expect(entryClass).toBe('entry-link');
             done();
@@ -104,18 +121,24 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+        //variables needed to compare different contents 
         let entry0, entry1;
+        //wait for allFeeds[0] to be loaded
         beforeEach(function(done) {
             loadFeed(0, function() {
+                //first entry in that feed
                 entry0 = document.querySelector('.feed').firstElementChild.innerHTML;
                 done();
             });
         });
 
+        //wait for allFeeds[1] to be loaded (thx to loadFeed callback param)
         it('changes content', function(done) {
             loadFeed(1, function() {
+                //first entry in that feed
                 entry1 = document.querySelector('.feed').firstElementChild.innerHTML;
             });
+            //the two entries cannot be the same
             expect(entry0).not.toEqual(entry1);
             done();
         });
