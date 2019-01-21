@@ -72,7 +72,7 @@ $(function() {
         it('is hidden by default', function() {
             //body element has class named 'menu-hidden'
             //see style.css: tranlsate3d
-            expect(body.className).toBe('menu-hidden');
+            expect(body.classList).toContain('menu-hidden');
         });
 
          /* TODO: Write a test that ensures the menu changes
@@ -84,11 +84,11 @@ $(function() {
             //make a click on menu-icon
             menuIcon.click();
             //menu is visible
-            expect(body.className).toBe('');
+            expect(body.classList).not.toContain('menu-hidden');
             //make another click on menu-icon
             menuIcon.click();
             //menu is invisible
-            expect(body.className).toBe('menu-hidden');
+            expect(body.classList).toContain('menu-hidden');
         });
     });
 
@@ -101,15 +101,16 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
+
         //wait for allFeeds[0] to be loaded
         beforeEach(function(done) {
             loadFeed(0, done);
         });
         
         it('are loaded', function(done) {
-            //first child is there and has an appropriate class
-            let entryClass = document.querySelector('.feed').firstElementChild.className;
-            expect(entryClass).toBe('entry-link');
+            //feed has at least 1 child element
+            let numEntries = document.querySelector('.feed').childElementCount;
+            expect(numEntries).toBeGreaterThan(0);
             done();
         });
     });
@@ -121,26 +122,28 @@ $(function() {
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
-        //variables needed to compare different contents 
-        let entry0, entry1;
-        //wait for allFeeds[0] to be loaded
+
+        //variables needed to compare different contents
+        let feedAfterFirstLoad, feedAfterSecondLoad;
+
         beforeEach(function(done) {
+            //wait for allFeeds[0] to be loaded
             loadFeed(0, function() {
-                //first entry in that feed
-                entry0 = document.querySelector('.feed').firstElementChild.innerHTML;
-                done();
+                //save content
+                feedAfterFirstLoad = document.querySelector('.feed').innerHTML;
+                //wait for allFeeds[1] to be loaded
+                loadFeed(1, function() {
+                    //save content
+                    feedAfterSecondLoad = document.querySelector('.feed').innerHTML;
+                    done();
+                });
             });
         });
 
-        //wait for allFeeds[1] to be loaded (thx to loadFeed callback param)
         it('changes content', function(done) {
-            loadFeed(1, function() {
-                //first entry in that feed
-                entry1 = document.querySelector('.feed').firstElementChild.innerHTML;
-            });
-            //the two entries cannot be the same
-            expect(entry0).not.toEqual(entry1);
+            //compare the 2 saved contents
+            expect(feedAfterFirstLoad).not.toEqual(feedAfterSecondLoad);
             done();
-        });
+        })
     });
 }());
